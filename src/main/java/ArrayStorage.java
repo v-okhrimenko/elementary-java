@@ -4,67 +4,57 @@ import java.util.Arrays;
  * Array based storage for Employees
  */
 public class ArrayStorage {
-    private static int COUNT = 0;
+    private int counter = 0;
     Employee[] storage = new Employee[10000];
 
     void clear() {
         Arrays.fill(storage, null);
-        COUNT = 0;
+        counter = 0;
     }
 
     void save(Employee employee) {
-
         if (size() == storage.length) {
             System.out.println("Unable to save. The array is full");
-        } else if (employee == null) {
-            System.out.println("Unable to save NULL");
-        } else {
-            COUNT++;
-            storage[size() - 1] = employee;
+            return;
         }
+        if (employee == null) {
+            System.out.println("Unable to save NULL");
+            return;
+        }
+        counter++;
+        storage[size() - 1] = employee;
     }
 
     Employee get(String uuid) {
-        int index = 0;
-        try {
-            while (!storage[index].uuid.equals(uuid)) {
-                if (index == storage.length - 1 || storage[index] == null) {
-                    return null;
-                }
-                index++;
+        for (int s = 0; s < size(); s++) {
+            if (storage[s].uuid.equals(uuid)) {
+                return storage[s];
             }
-        } catch (NullPointerException e) {
-            return null;
         }
-        return storage[index];
+        System.out.println("Uuid " + uuid + " is not found");
+        return null;
     }
 
     void delete(String uuid) {
-        Employee[] newArray = new Employee[storage.length];
         for (int i = 0; i < size(); i++) {
-            Employee e = storage[i];
-            if (e.uuid.equals(uuid)) {
-                storage[i] = null;
-
-                System.arraycopy(storage, i + 1, newArray, 0, storage.length - 1 - i);
-                System.arraycopy(newArray, 0, storage, i, storage.length - 1 - i);
-
-                COUNT--;
-                break;
+            if (storage[i].uuid.equals(uuid)) {
+                storage[i] = storage[size() - 1];
+                storage[size() - 1] = null;
+                counter--;
+                return;
             }
         }
+        System.out.println("Cant delete, uuid " + uuid + " not found");
     }
 
     /**
      * @return array, contains only Employees in storage (without null)
      */
     Employee[] getAll() {
-        Employee[] arrEmployee = new Employee[size()];
-        System.arraycopy(storage, 0, arrEmployee, 0, size());
-        return arrEmployee;
+        return Arrays.copyOfRange(storage, 0, size());
     }
 
     int size() {
-        return COUNT;
+        return counter;
     }
 }
