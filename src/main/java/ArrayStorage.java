@@ -3,58 +3,74 @@ import java.util.Arrays;
 /**
  * Array based storage for Employees
  */
-public class ArrayStorage {
+class ArrayStorage implements StorageMethods {
     private int counter = 0;
-    Employee[] storage = new Employee[10000];
+    private final Employee[] storage = new Employee[10000];
 
-    void clear() {
+
+    public void clear() {
         Arrays.fill(storage, null);
         counter = 0;
     }
 
-    void save(Employee employee) {
+    public void save(Employee employee) {
+        if ((employee == null) || (employee.getUuid() == null) || employee.getUuid().isEmpty()) {
+            System.out.println("Unable to save NULL");
+            return;
+        }
+        if (checkIfEmployIdIPresent(employee.getUuid())) {
+            System.out.println("Unable to save. This UUID " + employee.getUuid() + " is already in use");
+            return;
+        }
         if (size() == storage.length) {
             System.out.println("Unable to save. The array is full");
             return;
         }
-        if (employee == null) {
-            System.out.println("Unable to save NULL");
-            return;
-        }
         counter++;
         storage[size() - 1] = employee;
+        System.out.println("Employee " + employee.getUuid() + " saved");
     }
 
-    Employee get(String uuid) {
+    public Employee get(String uuid) {
         for (int s = 0; s < size(); s++) {
-            if (storage[s].uuid.equals(uuid)) {
+            if (storage[s].getUuid().equals(uuid)) {
                 return storage[s];
             }
         }
-        System.out.println("Uuid " + uuid + " is not found");
+        System.out.println("UUID " + uuid + " is not found");
         return null;
     }
 
-    void delete(String uuid) {
+    public void delete(String uuid) {
         for (int i = 0; i < size(); i++) {
-            if (storage[i].uuid.equals(uuid)) {
+            if (storage[i].getUuid().equals(uuid)) {
                 storage[i] = storage[size() - 1];
                 storage[size() - 1] = null;
                 counter--;
+                System.out.println("Employee with UUID " + uuid + " deleted");
                 return;
             }
         }
-        System.out.println("Cant delete, uuid " + uuid + " not found");
+        System.out.println("Cant delete, UUID " + uuid + " not found");
     }
 
     /**
      * @return array, contains only Employees in storage (without null)
      */
-    Employee[] getAll() {
+    public Employee[] getAll() {
         return Arrays.copyOfRange(storage, 0, size());
     }
 
-    int size() {
+    public int size() {
         return counter;
+    }
+
+    private boolean checkIfEmployIdIPresent(String uuid) {
+        for (int i = 0; i < size(); i++) {
+            if (storage[i].getUuid().equals(uuid)) {
+                return true;
+            }
+        }
+        return false;
     }
 }
