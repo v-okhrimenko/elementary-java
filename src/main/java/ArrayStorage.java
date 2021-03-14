@@ -3,7 +3,7 @@ import java.util.Arrays;
 /**
  * Array based storage for Employees
  */
-class ArrayStorage implements StorageMethods {
+class ArrayStorage {
     private int counter = 0;
     private final Employee[] storage = new Employee[10000];
 
