@@ -4,7 +4,7 @@ import java.util.Arrays;
  * Array based storage for Employees
  */
 class ArrayStorage {
-    private int counter = 0;
+    private int counter;
     private final Employee[] storage = new Employee[10000];
 
 
@@ -13,7 +13,6 @@ class ArrayStorage {
             Arrays.fill(storage, null);
             counter = 0;
         }
-
     }
 
     public void save(Employee employee) {

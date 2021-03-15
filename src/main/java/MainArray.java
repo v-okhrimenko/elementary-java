@@ -5,6 +5,7 @@ public class MainArray {
     private static String command;
     private static String uuid;
 
+
     public static void main(String[] args) {
 
         Scanner scanner = new Scanner(System.in);
@@ -31,7 +32,6 @@ public class MainArray {
                 case "get":
                     if (ARRAY_STORAGE.findUuidIndex(uuid) > ARRAY_STORAGE.size()) {
                         System.out.println("UUID " + uuid + " is not found");
-                        break;
                     } else {
                         System.out.println("Get employee: " + ARRAY_STORAGE.get(uuid));
                     }
@@ -80,13 +80,11 @@ public class MainArray {
             case "save":
             case "delete":
             case "get":
-                if (temp.length == 1) {
-                    command = "no uuid";
-                } else if (temp.length == 2) {
+                if (temp.length == 2) {
                     command = temp[0];
                     uuid = temp[1];
                 } else {
-                    command = "err";
+                    command = (temp.length == 1) ? "no uuid" : "err";
                 }
                 break;
             default:
