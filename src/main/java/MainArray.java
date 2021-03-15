@@ -1,9 +1,9 @@
 import java.util.Scanner;
 
 public class MainArray {
-    static final ArrayStorage ARRAY_STORAGE = new ArrayStorage();
-    static String command;
-    static String uuid;
+    private static final ArrayStorage ARRAY_STORAGE = new ArrayStorage();
+    private static String command;
+    private static String uuid;
 
     public static void main(String[] args) {
 
@@ -14,7 +14,7 @@ public class MainArray {
         while (noExit) {
             System.out.print("\nВведите одну из команд - (list | save uuid | delete uuid | get uuid | size | clear | exit): ");
             scTxt = scanner.nextLine();
-            checkScanner(scTxt);
+            scannerCheck(scTxt);
 
             switch (command) {
                 case "list":
@@ -29,7 +29,12 @@ public class MainArray {
                     printAll();
                     break;
                 case "get":
-                    System.out.println("Get employee: " + ARRAY_STORAGE.get(uuid));
+                    if (ARRAY_STORAGE.findUuidIndex(uuid) > ARRAY_STORAGE.size()) {
+                        System.out.println("UUID " + uuid + " is not found");
+                        break;
+                    } else {
+                        System.out.println("Get employee: " + ARRAY_STORAGE.get(uuid));
+                    }
                     break;
                 case "size":
                     System.out.println("Storage size: " + ARRAY_STORAGE.size());
@@ -62,23 +67,16 @@ public class MainArray {
         }
     }
 
-    private static void checkScanner(String sc) {
+    private static void scannerCheck(String sc) {
         String[] temp = sc.split(" ");
-
-        switch (temp[0]) {
+        String x = temp[0];
+        switch (x) {
             case "list":
-                command = (temp.length > 1) ? "err" : "list";
-                break;
-            case "size":
-                command = (temp.length > 1) ? "err" : "size";
-                break;
-            case "clear":
-                command = (temp.length > 1) ? "err" : "clear";
-                break;
             case "exit":
-                command = (temp.length > 1) ? "err" : "exit";
+            case "size":
+            case "clear":
+                command = (temp.length > 1) ? "err" : x;
                 break;
-
             case "save":
             case "delete":
             case "get":

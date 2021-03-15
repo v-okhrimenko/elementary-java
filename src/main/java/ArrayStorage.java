@@ -9,8 +9,11 @@ class ArrayStorage {
 
 
     public void clear() {
-        Arrays.fill(storage, null);
-        counter = 0;
+        if (size() != 0) {
+            Arrays.fill(storage, null);
+            counter = 0;
+        }
+
     }
 
     public void save(Employee employee) {
@@ -18,7 +21,7 @@ class ArrayStorage {
             System.out.println("Unable to save NULL");
             return;
         }
-        if (checkIfEmployIdIPresent(employee.getUuid())) {
+        if (findUuidIndex(employee.getUuid()) <= storage.length) {
             System.out.println("Unable to save. This UUID " + employee.getUuid() + " is already in use");
             return;
         }
@@ -32,24 +35,21 @@ class ArrayStorage {
     }
 
     public Employee get(String uuid) {
-        for (int s = 0; s < size(); s++) {
-            if (storage[s].getUuid().equals(uuid)) {
-                return storage[s];
-            }
+        int i = findUuidIndex(uuid);
+        if (i <= storage.length) {
+            return storage[i];
         }
-        System.out.println("UUID " + uuid + " is not found");
         return null;
     }
 
     public void delete(String uuid) {
-        for (int i = 0; i < size(); i++) {
-            if (storage[i].getUuid().equals(uuid)) {
-                storage[i] = storage[size() - 1];
-                storage[size() - 1] = null;
-                counter--;
-                System.out.println("Employee with UUID " + uuid + " deleted");
-                return;
-            }
+        int i = findUuidIndex(uuid);
+        if (i <= storage.length) {
+            storage[i] = storage[size() - 1];
+            storage[size() - 1] = null;
+            counter--;
+            System.out.println("Employee with UUID " + uuid + " deleted");
+            return;
         }
         System.out.println("Cant delete, UUID " + uuid + " not found");
     }
@@ -65,12 +65,12 @@ class ArrayStorage {
         return counter;
     }
 
-    private boolean checkIfEmployIdIPresent(String uuid) {
+    public int findUuidIndex(String uid) {
         for (int i = 0; i < size(); i++) {
-            if (storage[i].getUuid().equals(uuid)) {
-                return true;
+            if (storage[i].getUuid().equals(uid)) {
+                return i;
             }
         }
-        return false;
+        return storage.length + 1;
     }
 }
