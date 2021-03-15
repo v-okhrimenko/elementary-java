@@ -35,7 +35,7 @@ class ArrayStorage {
 
     public Employee get(String uuid) {
         int i = findUuidIndex(uuid);
-        if (i <= storage.length) {
+        if (i <= storage.length - 1) {
             return storage[i];
         }
         return null;
@@ -43,7 +43,7 @@ class ArrayStorage {
 
     public void delete(String uuid) {
         int i = findUuidIndex(uuid);
-        if (i <= storage.length) {
+        if (i <= storage.length - 1) {
             storage[i] = storage[size() - 1];
             storage[size() - 1] = null;
             counter--;
