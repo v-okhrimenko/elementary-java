@@ -7,7 +7,6 @@ public class MainArray {
 
 
     public static void main(String[] args) {
-
         Scanner scanner = new Scanner(System.in);
         String scTxt;
         boolean noExit = true;
@@ -30,7 +29,7 @@ public class MainArray {
                     printAll();
                     break;
                 case "get":
-                    if (ARRAY_STORAGE.findUuidIndex(uuid) > ARRAY_STORAGE.size()) {
+                    if (ARRAY_STORAGE.findUuidIndex(uuid) > ARRAY_STORAGE.size() - 1) {
                         System.out.println("UUID " + uuid + " is not found");
                     } else {
                         System.out.println("Get employee: " + ARRAY_STORAGE.get(uuid));
